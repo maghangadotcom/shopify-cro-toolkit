@@ -1,0 +1,1 @@
+// Intersection Observer for below-fold content

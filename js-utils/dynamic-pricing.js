@@ -1,0 +1,1 @@
+// Real-time price update on variant change

@@ -1,0 +1,1 @@
+# Writing configurable section schemas

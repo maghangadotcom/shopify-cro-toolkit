@@ -1,0 +1,1 @@
+// Microsoft Clarity custom event tagging
