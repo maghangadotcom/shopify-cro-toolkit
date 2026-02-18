@@ -245,7 +245,6 @@ I am Thomas Maghanga, a Shopify developer and CRO specialist based in Nairobi, K
 
 I focus on the intersection of Shopify development, conversion rate optimization and retention. The work I do sits between the code and the business logic - translating growth goals into clean, testable technical execution.
 
-- Portfolio: [maghanga-portfolio.vercel.app](https://maghanga-portfolio.vercel.app/)
 - LinkedIn: [linkedin.com/in/thomas-maghanga](https://www.linkedin.com/in/thomas-maghanga/)
 
 ## License
