@@ -1,0 +1,89 @@
+/* Merchant-first teaching layer. Styles are scoped to avoid changing the shop demo. */
+.merchant-playbook { max-width:1280px; margin:0 auto 56px; }
+.merchant-playbook h2 { font-size:clamp(26px, 3vw, 38px); letter-spacing:-1.1px; }
+.merchant-playbook h3 { font-size:clamp(24px, 2.7vw, 32px); letter-spacing:-.7px; }
+.merchant-playbook p { line-height:1.6; }
+.merchant-start { display:grid; grid-template-columns:1.15fr 1fr; gap:32px 64px; padding:36px; background:var(--green); border:1px solid #c0cd9d; }
+.merchant-start .eyebrow { margin-bottom:16px; }
+.merchant-start h2 { max-width:560px; }
+.merchant-start h2 + p { margin:18px 0 22px; max-width:580px; }
+.merchant-primary { display:inline-flex; align-items:center; justify-content:center; gap:18px; background:var(--navy); color:white; padding:13px 17px; border-radius:4px; text-decoration:none; font-weight:700; font-size:13px; min-height:46px; }
+.merchant-steps { list-style:none; margin:0; padding:0; display:grid; gap:20px; align-content:center; }
+.merchant-steps li { display:flex; align-items:flex-start; gap:16px; }
+.merchant-steps li > span { font-size:12px; padding-top:4px; border-bottom:1px solid #85966b; }
+.merchant-steps strong { font-size:16px; }
+.merchant-steps p { font-size:13px; margin-top:4px; }
+.merchant-boundary { grid-column:1/-1; border-top:1px solid #aebc90; padding-top:16px; font-size:12px; }
+.merchant-explore, .merchant-plan { margin-top:54px; }
+.merchant-section-heading { display:flex; justify-content:space-between; align-items:flex-end; gap:32px; margin-bottom:24px; }
+.merchant-section-heading .eyebrow { margin-bottom:12px; }
+.merchant-section-heading > p { max-width:360px; font-size:13px; color:var(--muted); }
+.merchant-lesson-layout { display:grid; grid-template-columns:280px minmax(0,1fr); border:1px solid var(--line); background:#fffefa; }
+.merchant-lessons { border-right:1px solid var(--line); background:#efeee7; padding:12px; display:flex; flex-direction:column; gap:6px; }
+.merchant-lessons button { display:grid; grid-template-columns:24px minmax(0,1fr) 14px; gap:9px; text-align:left; border:1px solid transparent; padding:15px 12px; min-height:54px; background:transparent; font-size:14px; line-height:1.35; }
+.merchant-lessons button span { font-size:11px; padding-top:2px; }
+.merchant-lessons button[aria-current] { background:var(--navy); color:white; }
+.merchant-lessons button:not([aria-current]):hover { background:#e4e4d9; border-color:#bec0b4; }
+.merchant-lesson { min-width:0; padding:30px; }
+.merchant-lesson > .eyebrow { color:var(--muted); margin-bottom:14px; }
+.merchant-lesson h3 { scroll-margin-top:28px; }
+.merchant-problem { margin:22px 0; }
+.merchant-problem strong { font-size:12px; }
+.merchant-problem p { margin-top:5px; color:#505b5f; }
+.merchant-example { padding:22px; background:var(--purple); border:1px solid #d3ccdf; }
+.merchant-example-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+.merchant-example-top strong { font-size:14px; }
+.merchant-example-top span { font-size:11px; color:#5c5666; }
+.merchant-example-switch { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+.merchant-example-switch button, .merchant-question-buttons button { min-height:44px; background:#fffefa; border:1px solid #b7b1c2; padding:9px 14px; font-size:13px; }
+.merchant-example-switch button[aria-pressed=true], .merchant-question-buttons button[aria-pressed=true] { background:var(--navy); color:white; border-color:var(--navy); }
+.merchant-example-copy { font-size:16px; }
+.merchant-example > a { display:inline-block; margin-top:18px; font-size:13px; font-weight:700; }
+.merchant-participation, .merchant-review-exercise { margin-top:20px; padding-top:18px; border-top:1px solid #c6bfd1; }
+.merchant-participation > p { font-size:13px; }
+.merchant-question-buttons { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.merchant-answer { padding:14px; background:#fffefa; border-left:3px solid #90809e; font-size:13px; }
+.merchant-review-exercise blockquote { margin:14px 0; font-size:18px; }
+.merchant-playbook fieldset { border:0; margin:0; padding:0; min-width:0; }
+.merchant-playbook legend { font-weight:700; font-size:13px; padding:0; }
+.merchant-action-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px 28px; margin:24px 0; }
+.merchant-action-grid dt { font-size:13px; font-weight:700; margin-bottom:6px; }
+.merchant-action-grid dd { font-size:13px; color:#505b5f; margin:0; line-height:1.6; }
+.merchant-lesson-end { border-top:1px solid var(--line); padding-top:22px; }
+.merchant-lesson-end details { font-size:12px; margin-top:20px; }
+.merchant-lesson-end summary { cursor:pointer; padding:10px 0; }
+.merchant-lesson-end details p { margin:6px 0 10px; max-width:680px; }
+.merchant-lesson-end details a { overflow-wrap:anywhere; }
+.merchant-plan { padding:30px; background:#efeee7; border:1px solid var(--line); }
+.merchant-plan-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+.merchant-plan label[for], .merchant-plan legend { display:block; font-weight:700; font-size:13px; margin-bottom:10px; }
+.merchant-plan select { width:100%; min-height:46px; background:#fffefa; border:1px solid #9ba19d; padding:10px; }
+.merchant-plan-controls > p { margin:20px 0; font-size:14px; }
+.merchant-plan-controls > p > strong { display:block; font-size:12px; margin-bottom:6px; }
+.merchant-plan fieldset { margin:22px 0; }
+.merchant-plan fieldset label { display:flex; align-items:flex-start; gap:10px; padding:8px 0; font-size:13px; cursor:pointer; }
+.merchant-plan input { width:18px; height:18px; flex:0 0 18px; margin:2px 0 0; accent-color:var(--navy); }
+.merchant-plan-controls .merchant-plan-warning { font-size:12px; color:#505b5f; }
+.merchant-plan textarea { display:block; width:100%; resize:vertical; min-height:280px; max-height:600px; border:1px solid #9ba19d; background:#fffefa; color:var(--ink); padding:14px; font:13px/1.6 Arial, sans-serif; }
+.merchant-plan textarea:focus-visible { outline:3px solid #b2682c; outline-offset:3px; }
+.merchant-secondary { margin-top:12px; border:1px solid var(--ink); min-height:44px; padding:10px 15px; background:transparent; font-size:13px; font-weight:700; }
+.merchant-plan-memory, .merchant-plan-notice { margin-top:12px; font-size:12px; }
+.merchant-plan-notice { min-height:20px; }
+@media (max-width:1320px) { .merchant-playbook { margin-left:24px; margin-right:24px; } }
+@media (max-width:900px) { .merchant-start { gap:26px; padding:26px; } .merchant-lesson-layout { grid-template-columns:230px minmax(0,1fr); } .merchant-lesson { padding:22px; } .merchant-action-grid { grid-template-columns:1fr; } .merchant-section-heading { align-items:flex-start; flex-direction:column; gap:14px; } .merchant-section-heading > p { max-width:none; } }
+@media (max-width:650px) {
+  .merchant-playbook { margin:0 16px 36px; }
+  .merchant-start, .merchant-plan { padding:20px; }
+  .merchant-start, .merchant-plan-grid, .merchant-lesson-layout { grid-template-columns:1fr; }
+  .merchant-start { gap:24px; }
+  .merchant-lessons { border-right:0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:1fr; gap:3px; }
+  .merchant-lessons button { padding:11px; min-height:44px; }
+  .merchant-lesson { padding:20px 16px; }
+  .merchant-example { padding:16px; }
+  .merchant-example-top { flex-direction:column; align-items:flex-start; gap:3px; }
+  .merchant-example-switch button { flex:1 1 auto; }
+  .merchant-explore, .merchant-plan { margin-top:36px; }
+  .merchant-question-buttons button { flex:1 1 auto; }
+  .merchant-primary { width:100%; gap:12px; }
+  .merchant-plan-grid { gap:20px; }
+}

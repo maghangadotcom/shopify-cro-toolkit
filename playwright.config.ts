@@ -12,8 +12,10 @@ export default defineConfig({
   reporter: "list",
   use: {
     baseURL: "http://127.0.0.1:3100",
-    channel:
-      process.env.PLAYWRIGHT_CHANNEL === "chromium" ? undefined : "chrome",
+    channel: process.env.PLAYWRIGHT_EXECUTABLE_PATH || process.env.PLAYWRIGHT_CHANNEL === "chromium" ? undefined : "chrome",
+    launchOptions: process.env.PLAYWRIGHT_EXECUTABLE_PATH
+      ? { executablePath: process.env.PLAYWRIGHT_EXECUTABLE_PATH }
+      : undefined,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
@@ -30,3 +32,4 @@ export default defineConfig({
     timeout: 120_000,
   },
 });
+

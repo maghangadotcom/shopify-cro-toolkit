@@ -25,7 +25,38 @@ npx playwright install --with-deps chromium
 PLAYWRIGHT_CHANNEL=chromium npm run test:browser
 ```
 
-## Manual reviewer walkthrough
+If a compatible local Chromium is already installed, use its explicit path without changing the CI default:
+
+```sh
+PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/chromium npm run test:browser
+```
+
+## Merchant and buyer-guidance review
+
+1. Start from a fresh reload in **Merchant guide**. **Developer details** should be closed; the plain-language learning path should work without opening it. Switch to **Shopper preview** to inspect the separate full product page. Switch back and confirm shopping choices are preserved.
+2. Navigate the lessons using only the keyboard. Compare before/proposed examples and confirm each explains a problem, an action, evidence needed, a metric and a possible downside.
+3. Explore a shopper question and tag fictional feedback. Confirm that these actions reveal relevant content, not testimonials or invented customer findings. Nothing should be gated behind submitting personal information.
+4. Choose one lesson for a test plan and change its evidence checklist. Verify the plan remains a draft, does not claim a winning test and is discarded on reset or reload.
+5. On the proposed coffee page, use the default 250 g / $24 / 18 g-per-cup assumptions: 13 complete cups, 16 g left over, $1.85 per cup rounded up. Select 15 g: 16 complete cups and $1.50 per cup. Verify shipping, tax and other exclusions remain clear.
+6. Change size and purchase type. The cup estimate should use the displayed price. Toggle baseline/proposed: the full price and choices should be preserved, even when optional guidance is hidden.
+7. Compare 500 g at two cups per day, then explicitly apply **Use this bag size**. Only size should change: no subscription, frequency change or cart addition. All purchase controls remain available without using this comparison.
+8. Reset. Confirm default size, one-time purchase, dose, routine comparison, learning choices and event history are restored. Test repeated exploration/application, then reset again.
+9. Open **Developer details** to inspect new local events. Confirm deterministic sequence numbers, explicit simulation/local-only labels and no network transmission. Diagnostic clicks are not conversion outcomes.
+
+These are required review scenarios, not a claim that every platform has been manually verified. Automated assertions are in `tests/browser.spec.ts` and `tests/buyer-guidance.test.ts`. Source attribution and evidence limits are in [BUYER-PSYCHOLOGY.md](BUYER-PSYCHOLOGY.md).
+
+## Ritual page and embedded offer review
+
+1. In **Shopper preview**, confirm one-time purchase is the default. Read ritual copy, product details and FAQs without entering personal information or joining a subscription.
+2. Choose a subscription and a nondefault interval, then use **Choose 500 g instead**. Confirm only size changes; the price updates and no item is added until an explicit add action.
+3. Add the optional scoop from **Complete your ritual**. Verify the cart contains one one-time scoop, not recurring coffee or a subscription. The same offer cannot add a duplicate from the page or cart.
+4. Remove the scoop. Confirm the page offer becomes available again. Dismiss the offer and verify both page and cart respect the dismissal; reload preserves dismissal for this browser tab, while Reset restores it.
+5. Switch Merchant guide / Shopper preview repeatedly with a nonempty cart and chosen frequency. Confirm no choices change. Repeat with a simulated failed add, then retry; cart must remain unchanged on failure.
+6. Use keyboard-only navigation for the embedded offers and FAQ disclosures at mobile widths. Check visible focus, meaningful buttons, disclosure state, contrast and no horizontal scrolling.
+
+## Existing commerce walkthrough
+
+Open **Developer details** when using the engineering controls below.
 
 1. Start with one-time 250 g: $24 plus $5 demo shipping. Switch to subscription: $20.40 and an explicit renewal interval.
 2. Choose 500 g; then choose sold-out 1 kg and verify purchase is disabled. Change back.
@@ -45,4 +76,5 @@ The standalone Liquid section has source/schema checks, but requires an unpublis
 
 Define the eligible audience and exposure event; choose a single primary metric, minimum detectable effect, power, sample size and fixed analysis plan before launch. Assign visitors consistently and check sample-ratio mismatch. Instrument only with appropriate consent; de-duplicate events using a contract that matches the actual platform and checkout. Validate attribution and server-side order reconciliation.
 
-The lab proposes hypotheses for subscription selection and cart completion. Validate purchase conversion, attach rate and AOV alongside margin, refunds, early subscription cancellation, support contacts, cart errors and accessibility. Do not optimize subscription attach rate while obscuring renewal terms. Monitor guardrails; do not stop early merely because a result looks positive. Record inconclusive outcomes as such. There are no effect sizes or experiment results in this repository.
+The lab proposes hypotheses for shopper understanding, purchase completion, subscription selection and cart completion. The learning examples and the local test-plan checklist are not a randomized experiment. Validate purchase conversion, attach rate and AOV alongside margin, refunds, early subscription cancellation, support contacts, cart errors and accessibility. Do not optimize subscription attach rate while obscuring renewal terms. Monitor guardrails; do not stop early merely because a result looks positive. Record inconclusive outcomes as such. There are no effect sizes or experiment results in this repository.
+

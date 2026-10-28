@@ -8,6 +8,13 @@ export const EVENT_NAMES = [
   "experiment_viewed",
   "request_failed",
   "demo_reset",
+  "guide_interaction",
+  "experience_viewed",
+  "product_upsell_selected",
+  "price_assumption_changed",
+  "buyer_question_opened",
+  "routine_preview_changed",
+  "routine_selection_applied",
 ] as const;
 
 export type EventName = (typeof EVENT_NAMES)[number];
@@ -58,3 +65,4 @@ export function createEvent(
     payload: snapshot,
   };
 }
+
