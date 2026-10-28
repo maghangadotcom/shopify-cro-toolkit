@@ -1,12 +1,18 @@
 # Shopify CRO Lab
 
+[![CRO Lab checks](https://github.com/maghangadotcom/shopify-cro-toolkit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/maghangadotcom/shopify-cro-toolkit/actions/workflows/ci.yml)
+
+**[Try the live lab](https://shopify-cro-lab.vercel.app/) · [Test coverage](docs/TESTING-GUIDE.md) · [Shopify section installation](docs/INSTALLATION.md)**
+
 A merchant-friendly learning lab by [Thomas Maghanga](https://maghanga.com): understand a shopper problem, try a clearer product-page example, and prepare an evidence-led test. No coding or conversion-rate jargon is needed to start.
 
 The guided playbook adapts ideas discussed by **Rishi Rawat / Frictionless Commerce** and **Lorenzo Carreri**. It is educational, not affiliated with or endorsed by either. [Concepts, original sources and evidence requirements](docs/BUYER-PSYCHOLOGY.md).
 
-**Status:** an implemented demo for review on `development`. FORM & FIELD, Daybreak coffee, inventory and prices are fictional fixtures. There is no checkout, payment collection, customer data, analytics transmission or measured conversion lift. This repository does not establish Shopify Plus certification or a live-store integration.
+**Scope:** a published personal educational showcase. FORM & FIELD, Daybreak coffee, inventory and prices are fictional fixtures. There is no checkout, payment collection, customer data, analytics transmission or measured conversion lift. This repository does not establish Shopify Plus certification or a live-store integration.
 
 ## Start as a merchant
+
+Open the [live lab](https://shopify-cro-lab.vercel.app/) and follow this short walkthrough:
 
 1. **Start here:** understand the fictional coffee example and its limits.
 2. **Explore improvements:** compare a weak example with a proposed improvement. Each lesson explains the shopper problem, what to change, evidence to gather, what to measure and what could go wrong.
@@ -16,6 +22,12 @@ The guided playbook adapts ideas discussed by **Rishi Rawat / Frictionless Comme
 The default **Merchant guide** and **Shopper preview** are separate views so shoppers can explore a clean page without lesson panels. Switching views preserves product and cart choices. The optional larger-bag offer changes only the bag size; the optional scoop is always a one-time item, with the same dismissal and inventory state on the page and in the cart. Neither offer starts a subscription automatically.
 
 Developer evidence, simulated event payloads and failure controls are in the optional **Developer details** disclosure. Reset clears the new learning choices as well as the cart and event history. Reload also discards the in-memory learning plan.
+
+## For developers and hiring teams
+
+Inspect how shopper-facing decisions connect to implementation: [pricing and cart rules](lib/commerce.ts), [browser flows](tests/browser.spec.ts), [merchant lessons](lib/playbook.ts) and the [separate Liquid section](liquid-sections/subscription-hero/subscription-hero.liquid). The lab covers voluntary subscriptions, optional larger-bag and scoop offers, stock constraints, recoverable errors and keyboard focus.
+
+The [testing guide](docs/TESTING-GUIDE.md) records automated coverage and manual integration checks. The CI badge links to current runs; automated app checks do not establish live Shopify compatibility or conversion impact.
 
 ## Run the lab
 
@@ -76,21 +88,23 @@ docs/                          Integration and validation guidance
 
 ## Hosting on Vercel
 
-The app builds as a static Next.js route using standard `npm run build`. No API secrets, database or commerce services are needed. Import this repository with the Next.js preset, repository root as Root Directory, Node.js 24 and npm's lockfile. Verify the production branch before linking any Git deployment; `development` should produce a preview only. Do not promote it to production until reviewed.
+The published showcase is [shopify-cro-lab.vercel.app](https://shopify-cro-lab.vercel.app/). The app builds as a static Next.js route using standard `npm run build`. No API secrets, database or commerce services are needed. For a separate deployment, use the Next.js preset, repository root as Root Directory, Node.js 24 and npm's lockfile.
 
-The existing personal educational showcase is at [shopify-cro-lab.vercel.app](https://shopify-cro-lab.vercel.app/). Changes on `development` remain review work; a draft PR does not authorize merging or promoting a preview to production. This addition does not create paid services or a Shopify store.
+Changes are prepared on `development`, checked in CI and released to `main` with a regular merge commit. Keep previews separate from production and verify the deployment's branch and exact commit before release. The hosted app is the simulation, not a Shopify store.
 
 Three local production Lighthouse runs and their configuration are recorded in [the performance report](docs/PERFORMANCE-RESULTS.md). These are lab measurements, not field metrics or conversion results.
 
-## What remains scaffolded
+## Integration limits and next steps
 
-The original repository contained one-line placeholders and a README describing future capabilities as implemented. Those claims have been replaced here. The original `js-utils/`, `analytics/`, `performance/`, `snippets/` files and other `liquid-sections/` folders remain **unimplemented scaffolds**, except the subscription section explicitly listed above. They are not imported by the lab and should not be installed as working utilities.
+The `js-utils/`, `analytics/`, `performance/`, `snippets/` files and other `liquid-sections/` folders remain **unimplemented scaffolds**, except the subscription section explicitly listed above. They are not imported by the lab and should not be installed as working utilities.
 
 Roadmap: verify the section in a Shopify development store; add live integration tests against a dev theme; repeat performance measurements on a deployed preview; validate analytics consent and assignment in a real experiment; implement additional sections only with their own evidence. There are no claimed conversion improvements, client results or cross-theme guarantees.
 
 ## About
 
-Thomas Maghanga — Shopify frontend and CRO implementation. This lab makes product decisions, engineering constraints and verification inspectable.
+Thomas Maghanga | Shopify Plus Developer & CRO Specialist. Storefront development and CRO implementation since 2021. Open to remote in-house roles and ongoing contracts.
 
-[Portfolio](https://maghanga.com) · [LinkedIn](https://www.linkedin.com/in/thomas-maghanga/)
+This lab makes product decisions, engineering constraints and verification inspectable.
+
+[Portfolio and case studies](https://maghanga.com/) · [Email](mailto:maghangamail@gmail.com) · [LinkedIn](https://www.linkedin.com/in/thomas-maghanga/)
 
