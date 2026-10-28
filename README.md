@@ -106,5 +106,5 @@ Thomas Maghanga | Shopify Plus Developer & CRO Specialist. Storefront developmen
 
 This lab makes product decisions, engineering constraints and verification inspectable.
 
-[Portfolio and case studies](https://maghanga.com/) · [Email](mailto:maghangamail@gmail.com) · [LinkedIn](https://www.linkedin.com/in/thomas-maghanga/)
+[Portfolio and case studies](https://maghanga.com/) · [Email](mailto:thomas@maghanga.com) · [LinkedIn](https://www.linkedin.com/in/thomas-maghanga/)
 
