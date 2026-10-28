@@ -52,6 +52,9 @@ test.beforeEach(async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Daybreak blend" }),
   ).toBeVisible();
+  // Engineering controls are optional; merchant guidance is the default view.
+  await page.locator("#developer-details > summary").click();
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
 });
 
 test("responsive product selection, sold-out state and baseline retain deterministic pricing", async ({
@@ -387,4 +390,91 @@ test("reduced motion disables animated scrolling and the purchase flow remains u
   ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(drawer(page)).not.toBeVisible();
+});
+
+
+test("merchant guidance is the default and lesson navigation works without developer details", async ({ page }) => {
+  await page.reload();
+  await expect(page.locator("#developer-details")).not.toHaveAttribute("open", "");
+  await expect(page.getByRole("heading", { name: "A clearer page starts with a shopper’s question." })).toBeVisible();
+  const lessons = page.getByRole("navigation", { name: "Improvement lessons" });
+  await expect(lessons.getByRole("button")).toHaveCount(7);
+  const expertise = lessons.getByRole("button", { name: /Show how you make decisions/ });
+  await expertise.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#lesson-title")).toHaveText("Show how you make decisions");
+  await expect(page.locator("#lesson-title")).toBeFocused();
+  await page.getByRole("button", { name: "Possible improvement", exact: true }).click();
+  await expect(page.locator(".merchant-example-copy")).toContainText("Illustrative process");
+  await expect(page.locator(".merchant-example-copy")).toContainText("real merchant would need");
+  await page.getByRole("button", { name: "Before", exact: true }).click();
+  await expect(page.locator(".merchant-example-copy")).toContainText("Expertly roasted");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+});
+
+test("optional questions and fictional feedback lead to useful explanations and a resettable draft plan", async ({ page }) => {
+  const lessons = page.getByRole("navigation", { name: "Improvement lessons" });
+  await lessons.getByRole("button", { name: /Let shoppers explore their question/ }).click();
+  await page.getByRole("button", { name: "Possible improvement", exact: true }).click();
+  await page.getByRole("button", { name: "How is it developed?", exact: true }).click();
+  await expect(page.locator("#merchant-answer")).toContainText("roast logs and tasting records");
+  await page.getByRole("button", { name: "Will it fit my routine?", exact: true }).click();
+  await expect(page.locator("#merchant-answer")).toContainText("does not select a subscription");
+  await expect(bag(page)).toHaveText("Your bag 0");
+  await expect(page.getByRole("radio", { name: /One-time purchase/ })).toBeChecked();
+  await lessons.getByRole("button", { name: /customer|feedback|reviews/i }).click();
+  await page.getByRole("button", { name: "Possible improvement", exact: true }).click();
+  await expect(page.locator(".merchant-review-exercise")).toContainText("NOT A CUSTOMER TESTIMONIAL");
+  await page.getByRole("button", { name: "Worry", exact: true }).click();
+  await expect(page.locator(".merchant-review-exercise .merchant-answer")).toContainText("One practice note proves nothing");
+  await page.getByRole("link", { name: "Use this in my draft plan ↓", exact: true }).click();
+  await expect(page.getByLabel("Choose your first improvement")).toHaveValue("reviews");
+  await page.getByRole("checkbox", { name: "I have reviewed real evidence for this change.", exact: true }).check();
+  await page.getByRole("checkbox", { name: "I have checked the claims, limits and keyboard/mobile experience.", exact: true }).check();
+  await page.getByRole("button", { name: "Select plan text to copy", exact: true }).click();
+  await expect(page.getByLabel("Your draft plan")).toBeFocused();
+  await expect(page.locator(".merchant-plan-notice")).toContainText("Plan text selected");
+  await page.getByRole("button", { name: /Reset demo/ }).click();
+  await expect(page.getByLabel("Choose your first improvement")).toHaveValue("price");
+  await expect(page.getByRole("checkbox", { name: "I have reviewed real evidence for this change.", exact: true })).not.toBeChecked();
+  await expect(page.locator("#lesson-title")).toHaveText("Explain the price");
+  expect(await newestEvent(page)).toMatchObject({ name: "demo_reset", sequence: 1, simulation: true, destination: "local-only" });
+});
+
+test("price assumptions and routine comparison are transparent, optional and applied only on request", async ({ page }) => {
+  const guidance = page.locator(".buyer-guidance");
+  await expect(guidance).toContainText("$1.85 per complete cup");
+  await expect(guidance).toContainText("13 complete cups, with 16 g left");
+  await page.getByLabel("Coffee per cup (grams)", { exact: true }).selectOption("15");
+  await expect(guidance).toContainText("$1.50 per complete cup");
+  await expect(guidance).toContainText("Excludes shipping, tax, equipment and waste");
+  await page.getByRole("radio", { name: /Subscribe & save 15%/ }).check();
+  await page.getByLabel("Delivery frequency", { exact: true }).selectOption("6");
+  await expect(guidance).toContainText("$1.28 per complete cup");
+  await page.getByRole("button", { name: "Will this bag fit my routine?", exact: true }).click();
+  await page.getByLabel("Cups per day", { exact: true }).selectOption("2");
+  await page.getByLabel("Compare a bag", { exact: true }).selectOption("daybreak-500");
+  await expect(page.locator("#routine-helper")).toContainText("500 g makes 33 complete cups: about 16.5 days");
+  await expect(page.locator(".price-line > strong")).toHaveText("$20.40");
+  await expect(bag(page)).toHaveText("Your bag 0");
+  await page.getByRole("button", { name: "Use this bag size", exact: true }).click();
+  await expect(page.getByRole("button", { name: "500 g", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("radio", { name: /Subscribe & save 15%/ })).toBeChecked();
+  await expect(page.getByLabel("Delivery frequency", { exact: true })).toHaveValue("6");
+  await expect(page.locator(".price-line > strong")).toHaveText("$35.70");
+  await expect(bag(page)).toHaveText("Your bag 0");
+  expect(await newestEvent(page)).toMatchObject({ name: "routine_selection_applied", simulation: true, destination: "local-only", payload: { item_id: "daybreak-500", cups_per_day: 2, dose_grams: 15 } });
+  await page.getByRole("button", { name: "Baseline", exact: true }).click();
+  await expect(guidance).toHaveCount(0);
+  await expect(page.locator(".price-line > strong")).toHaveText("$35.70");
+  await page.getByRole("button", { name: /Proposed design/ }).click();
+  await expect(page.getByLabel("Coffee per cup (grams)", { exact: true })).toHaveValue("15");
+  await page.getByRole("button", { name: /Reset demo/ }).click();
+  await expect(page.getByLabel("Coffee per cup (grams)", { exact: true })).toHaveValue("18");
+  await expect(page.getByRole("button", { name: "Will this bag fit my routine?", exact: true })).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("radio", { name: /One-time purchase/ })).toBeChecked();
+  await expect(page.locator(".price-line > strong")).toHaveText("$24.00");
+  await page.getByRole("button", { name: "Will this bag fit my routine?", exact: true }).click();
+  await expect(page.getByLabel("Cups per day", { exact: true })).toHaveValue("1");
+  await expect(page.getByLabel("Compare a bag", { exact: true })).toHaveValue("daybreak-250");
 });

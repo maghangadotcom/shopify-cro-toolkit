@@ -1884,3 +1884,43 @@ progress::-webkit-progress-value {
 .upsell small {
   font-size: 11px;
 }
+
+
+/* Merchant-first framing and explicit, optional product guidance. */
+.guide-disclaimer { font-size: 13px; color: var(--muted); margin-top: 18px; }
+.storefront-intro { padding: 42px 0 24px; max-width: 760px; }
+.storefront-intro h2 { font-family: Georgia, serif; font-size: clamp(28px, 4vw, 40px); margin: 12px 0; }
+.storefront-intro p:last-child { color: var(--muted); }
+.developer-details { margin: 54px 0 0; border: 1px solid var(--line); padding: 24px; }
+.developer-details > summary { cursor: pointer; font-weight: 700; font-size: 17px; }
+.developer-intro { max-width: 740px; margin-top: 16px; color: var(--muted); }
+.developer-details .evidence-section { padding-top: 32px; }
+.buyer-guidance { background: #f1f3e9; border: 1px solid #cdd4bd; padding: 20px; margin-top: 24px; }
+.buyer-guidance h3 { font-family: Georgia, serif; font-size: 23px; margin: 10px 0 14px; }
+.buyer-guidance p { margin: 12px 0; }
+.buyer-guidance label { display: block; margin: 16px 0 5px; font-weight: 700; font-size: 13px; }
+.buyer-guidance select { width: 100%; background: white; padding: 10px; min-height: 44px; border: 1px solid #aab49b; border-radius: 4px; color: var(--ink); }
+.buyer-guidance .assumption-note { font-size: 12px; color: #4b5545; line-height: 1.6; }
+.buyer-guidance .text-button { min-height: 44px; text-align: left; }
+.routine-helper { border-top: 1px solid #cdd4bd; margin-top: 10px; padding-top: 6px; }
+.routine-helper .secondary-button { width: 100%; margin: 8px 0; }
+@media (max-width: 600px) {
+  .developer-details { padding: 16px; }
+  .buyer-guidance { padding: 16px; }
+  .lab-header nav { flex-wrap: wrap; }
+}
+.storefront-intro { max-width: 1180px; margin: 0 auto; }
+.storefront-intro p:last-child { max-width: 740px; }
+.developer-details { max-width: 1180px; margin-left: auto; margin-right: auto; }
+.lab-header nav { font-size: 13px; gap: 18px; }
+.lab-header nav a { min-height: 44px; display: inline-flex; align-items: center; }
+@media (max-width: 1240px) {
+  .storefront-intro, .developer-details { margin-left: 22px; margin-right: 22px; }
+}
+@media (max-width: 700px) {
+  .lab-header { flex-wrap: wrap; }
+  .lab-header nav { width: 100%; margin: 0; justify-content: space-between; gap: 8px; font-size: 12px; }
+  .intro h1 { font-size: clamp(38px, 9vw, 49px); }
+}
+.price-context { font-size: 12px; color: #505b5f; margin: -10px 0 20px; line-height: 1.6; }
+.price-context a { display: inline-block; }
