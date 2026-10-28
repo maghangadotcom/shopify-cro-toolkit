@@ -1,6 +1,6 @@
 # Performance verification
 
-No Core Web Vitals score, conversion impact or performance improvement is claimed. The lab uses local SVG artwork with reserved dimensions, system fonts, a static Next.js route and no analytics SDK. Those choices should still be measured.
+Observed local production measurements are recorded in [PERFORMANCE-RESULTS.md](PERFORMANCE-RESULTS.md). No field Core Web Vitals, conversion impact or performance improvement is claimed. The lab uses local SVG artwork with reserved dimensions, system fonts, a static Next.js route and no analytics SDK. Those choices should still be measured.
 
 1. Build and start a production server (`npm run build`, then `npm start`). Do not measure the development server.
 2. Record the exact commit, Node/browser/Lighthouse versions, route, device preset, throttling, test location, cache state and date.

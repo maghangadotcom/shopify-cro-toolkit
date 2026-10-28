@@ -62,11 +62,13 @@ The app builds as a static Next.js route using standard `npm run build`. No API 
 
 **Deployment is pending.** The inspected Vercel workspace is on Hobby and has no existing project linked to this repository. Confirm that the intended use meets [Hobby's personal/noncommercial requirements](https://vercel.com/docs/plans/hobby), or approve the appropriate plan before creating a new project. No paid plan, project, production deployment or Shopify store was created by this implementation.
 
+Three local production Lighthouse runs and their configuration are recorded in [the performance report](docs/PERFORMANCE-RESULTS.md). These are lab measurements, not field metrics or conversion results.
+
 ## What remains scaffolded
 
 The original repository contained one-line placeholders and a README describing future capabilities as implemented. Those claims have been replaced here. The original `js-utils/`, `analytics/`, `performance/`, `snippets/` files and other `liquid-sections/` folders remain **unimplemented scaffolds**, except the subscription section explicitly listed above. They are not imported by the lab and should not be installed as working utilities.
 
-Roadmap: verify the section in a Shopify development store; add live integration tests against a dev theme; measure reproducible performance; validate analytics consent and assignment in a real experiment; implement additional sections only with their own evidence. There are no claimed conversion improvements, production deployments, client results or cross-theme guarantees.
+Roadmap: verify the section in a Shopify development store; add live integration tests against a dev theme; repeat performance measurements on a deployed preview; validate analytics consent and assignment in a real experiment; implement additional sections only with their own evidence. There are no claimed conversion improvements, production deployments, client results or cross-theme guarantees.
 
 ## About
 
