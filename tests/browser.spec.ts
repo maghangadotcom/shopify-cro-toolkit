@@ -529,6 +529,7 @@ test("embedded scoop stays one-time, cannot duplicate and shares dismissal with 
   await expect(drawer(page).getByRole("heading", { name: "Daybreak", exact: true })).toHaveCount(0);
   await expect(drawer(page).getByRole("button", { name: /^Add the scoop/ })).toHaveCount(0);
   await page.keyboard.press("Escape");
+  await expect(add(page)).toBeFocused();
   await expect(ritual.getByRole("button", { name: "Add scoop to demo bag", exact: true })).toHaveCount(0);
   await expect(ritual).toContainText("Already in your bag");
   await expect(page.getByRole("radio", { name: /One-time purchase/ })).toBeChecked();
@@ -547,4 +548,19 @@ test("embedded scoop stays one-time, cannot duplicate and shares dismissal with 
   await expect(bag(page)).toHaveText("Your bag 0");
   await add(page).click();
   await expect(drawer(page).getByRole("button", { name: /^Add the scoop/ })).toBeVisible();
+});
+
+
+test("guide preview links and empty-cart exploration focus the visible shopper experience", async ({ page }) => {
+  await page.getByRole("button", { name: "Merchant guide", exact: true }).click();
+  await page.getByRole("button", { name: "Or explore the coffee shop →", exact: true }).click();
+  await expect(page.locator("#product-title")).toBeFocused();
+  await page.getByRole("button", { name: "Merchant guide", exact: true }).click();
+  await expect(page.locator("#lab-title")).toBeFocused();
+  const evidence = page.locator("#evidence");
+  await evidence.getByRole("button", { name: /Try/ }).nth(1).click();
+  await expect(drawer(page)).toBeVisible();
+  await drawer(page).getByRole("button", { name: "Explore Daybreak", exact: true }).click();
+  await expect(drawer(page)).not.toBeVisible();
+  await expect(page.locator("#product-title")).toBeFocused();
 });

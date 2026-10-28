@@ -63,6 +63,7 @@ export function CroLab() {
   const returnFocus = useRef<HTMLElement | null>(null);
   const buyBox = useRef<HTMLDivElement>(null);
   const addButton = useRef<HTMLButtonElement>(null);
+  const bagButton = useRef<HTMLButtonElement>(null);
   const variant = VARIANTS.find((item) => item.id === variantId)!;
   const price = unitPrice(variant.priceCents, purchaseType);
   const totals = cartTotals(cart);
@@ -114,7 +115,10 @@ export function CroLab() {
   function showView(nextView: "guide" | "shop") {
     setView(nextView);
     track("experience_viewed", { view: nextView });
-    requestAnimationFrame(() => document.getElementById(nextView === "guide" ? "start-here" : "storefront")?.scrollIntoView({ behavior: "instant" }));
+    requestAnimationFrame(() => {
+      document.getElementById(nextView === "guide" ? "lab-title" : "product-title")?.focus({ preventScroll: true });
+      document.getElementById(nextView === "guide" ? "start-here" : "storefront")?.scrollIntoView({ behavior: "instant" });
+    });
   }
 
   function addScoop() {
@@ -273,7 +277,7 @@ export function CroLab() {
         <section className="intro" id="start-here" aria-labelledby="lab-title">
           <div>
             <p className="eyebrow">A HANDS-ON GUIDE FOR MERCHANTS</p>
-            <h1 id="lab-title">Help shoppers<br /><em>choose with confidence.</em></h1>
+            <h1 id="lab-title" tabIndex={-1}>Help shoppers<br /><em>choose with confidence.</em></h1>
           </div>
           <div className="intro-copy">
             <p>Not sure what to improve on your product page?</p>
@@ -336,7 +340,7 @@ export function CroLab() {
             <span className="store-brand">
               FORM <i>&</i> FIELD<span>COFFEE, WITH INTENTION.</span>
             </span>
-            <button className="bag-button" onClick={openCart}>
+            <button ref={bagButton} className="bag-button" onClick={openCart}>
               Your bag <span>{totals.itemCount}</span>
             </button>
           </div>
@@ -374,7 +378,7 @@ export function CroLab() {
             <div className="buy-box" ref={buyBox}>
               <p className="eyebrow">WHOLE BEAN / MEDIUM ROAST</p>
               <div className="title-row">
-                <h1>Daybreak blend</h1>
+                <h1 id="product-title" tabIndex={-1}>Daybreak blend</h1>
                 <span className="product-mark" aria-hidden="true">
                   ↗
                 </span>
@@ -648,11 +652,7 @@ export function CroLab() {
               guardrail="Purchase conversion, early cancellation and subscription support contacts."
               source="components/cro-lab.tsx"
               tests="tests/commerce.test.ts"
-              onTry={() =>
-                document
-                  .getElementById("storefront")
-                  ?.scrollIntoView({ behavior: "instant" })
-              }
+              onTry={() => showView("shop")}
             />
             <Evidence
               number="02"
@@ -852,7 +852,14 @@ export function CroLab() {
           }
         }}
         onClose={() => {
-          (returnFocus.current ?? addButton.current)?.focus();
+          const previous = returnFocus.current;
+          if (previous?.isConnected && previous.getClientRects().length > 0 && !previous.matches(":disabled")) {
+            previous.focus();
+          } else if (view === "shop") {
+            (addButton.current?.disabled ? bagButton.current : addButton.current)?.focus();
+          } else {
+            document.getElementById("lab-title")?.focus();
+          }
         }}
         onClick={(event) => {
           if (event.target === dialog.current) dialog.current?.close();
@@ -887,7 +894,7 @@ export function CroLab() {
                   className="secondary-button"
                   onClick={() => {
                     dialog.current?.close();
-                    addButton.current?.focus();
+                    showView("shop");
                   }}
                 >
                   Explore Daybreak
