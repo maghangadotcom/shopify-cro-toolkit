@@ -1,0 +1,50 @@
+{
+  "runs": [
+    {
+      "run": 1,
+      "time": "2026-10-28T13:20:15.553Z",
+      "score": 100,
+      "LCPms": 1899.2127,
+      "CLS": 0,
+      "TBTms": 31,
+      "warnings": [],
+      "error": null
+    },
+    {
+      "run": 2,
+      "time": "2026-10-28T13:20:44.505Z",
+      "score": 100,
+      "LCPms": 1888.9862,
+      "CLS": 0,
+      "TBTms": 40.5,
+      "warnings": [],
+      "error": null
+    },
+    {
+      "run": 3,
+      "time": "2026-10-28T13:21:05.270Z",
+      "score": 99,
+      "LCPms": 1961.6986000000002,
+      "CLS": 0,
+      "TBTms": 7.5,
+      "warnings": [],
+      "error": null
+    }
+  ],
+  "median": {
+    "score": 100,
+    "LCPms": 1899.2127,
+    "CLS": 0,
+    "TBTms": 31
+  },
+  "context": {
+    "kind": "local-production-lab",
+    "buildId": "X8sNarSbp4bEwfe2QHNQf",
+    "lighthouse": "13.6.0",
+    "chrome": "156.0.8078.48",
+    "measuredAppCommit": "ecdaf439ab03be85416e63e61f73118033fd5211",
+    "report": "PERFORMANCE-RESULTS.md",
+    "fieldMetrics": false,
+    "conversionResults": false
+  }
+}

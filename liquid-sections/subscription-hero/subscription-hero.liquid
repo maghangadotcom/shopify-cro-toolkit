@@ -1,0 +1,93 @@
+{% comment %}
+  Shopify OS 2.0 theme source, independent of the Vercel simulation.
+  Copy this file to sections/ and the accompanying JS/CSS to assets/.
+  All prices and plans come from Shopify; no client-side discount calculation.
+{% endcomment %}
+{{ 'subscription-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'subscription-hero.js' | asset_url }}" defer></script>
+{% liquid
+  assign hero_product = section.settings.product | default: product
+  assign form_id = 'CroProductForm-' | append: section.id
+  assign variant = hero_product.selected_or_first_available_variant
+  assign initial_allocation = nil
+  assign can_purchase = variant.available
+  assign image_loading = 'lazy'
+  if section.index == 1 or section.index == 2
+    assign image_loading = 'eager'
+  endif
+  if variant.requires_selling_plan
+    assign initial_allocation = variant.selling_plan_allocations.first
+    if initial_allocation == blank
+      assign can_purchase = false
+    endif
+  endif
+%}
+<section class="cro-product" data-cro-product data-section-id="{{ section.id }}" aria-labelledby="CroTitle-{{ section.id }}">
+  {% if hero_product != blank %}
+    <div class="cro-product__media">
+      {% if hero_product.featured_image %}
+        {{ hero_product.featured_image | image_url: width: 1200 | image_tag: widths: '360, 540, 720, 960, 1200', sizes: '(min-width: 800px) 50vw, 100vw', loading: image_loading, class: 'cro-product__image' }}
+      {% endif %}
+    </div>
+    <div class="cro-product__content">
+      <p class="cro-product__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2 id="CroTitle-{{ section.id }}">{{ hero_product.title | escape }}</h2>
+      {% if section.settings.description != blank %}<div class="cro-product__description">{{ section.settings.description }}</div>{% endif %}
+      <nav class="cro-product__variants" aria-label="Product variants">
+        {% for item in hero_product.variants %}
+          <a href="{{ hero_product.url }}?variant={{ item.id }}" data-cro-variant data-variant-id="{{ item.id }}" data-available="{{ item.available }}" {% if item.id == variant.id %}aria-current="true"{% endif %}>{{ item.title | escape }}{% unless item.available %} — Sold out{% endunless %}</a>
+        {% endfor %}
+      </nav>
+      {% form 'product', hero_product, id: form_id, class: 'cro-product__form' %}
+        {{ form.errors | default_errors }}
+        <input type="hidden" name="id" value="{{ variant.id }}" data-cro-variant-input>
+        <label for="CroPlan-{{ section.id }}">Purchase option</label>
+        <select name="selling_plan" id="CroPlan-{{ section.id }}" data-cro-plan>
+          {% unless variant.requires_selling_plan %}
+            <option value="" data-price-label="{{ variant.price | money_with_currency | escape }}" data-charge-label="One-time purchase">One-time purchase — {{ variant.price | money_with_currency }}</option>
+          {% endunless %}
+          {% for allocation in variant.selling_plan_allocations %}
+            <option value="{{ allocation.selling_plan.id }}" data-price-label="{{ allocation.price | money_with_currency | escape }}" data-charge-label="{{ allocation.checkout_charge_amount | money_with_currency | escape }} due at checkout; {{ allocation.per_delivery_price | money_with_currency | escape }} per delivery. Future pricing and terms follow the selected plan.">{{ allocation.selling_plan.name | escape }} — {{ allocation.price | money_with_currency }} ({{ allocation.checkout_charge_amount | money_with_currency }} due at checkout; {{ allocation.per_delivery_price | money_with_currency }} per delivery)</option>
+          {% endfor %}
+        </select>
+        {% comment %}JS reveals these only when it can keep them in sync with the selector. Native option labels always contain prices.{% endcomment %}
+        <p class="cro-product__price" data-cro-price hidden>{% if initial_allocation %}{{ initial_allocation.price | money_with_currency }}{% else %}{{ variant.price | money_with_currency }}{% endif %}</p>
+        <p class="cro-product__terms" data-cro-charge hidden>{% if initial_allocation %}{{ initial_allocation.checkout_charge_amount | money_with_currency }} due at checkout; {{ initial_allocation.per_delivery_price | money_with_currency }} per delivery. Future pricing and terms follow the selected plan.{% else %}One-time purchase{% endif %}</p>
+        <p class="cro-product__terms">Shipping and applicable taxes are calculated at checkout. Review the selected plan's delivery and cancellation terms before purchasing.</p>
+        {% if section.settings.terms_url != blank %}<a href="{{ section.settings.terms_url }}">Subscription and cancellation terms</a>{% endif %}
+        <label for="CroQuantity-{{ section.id }}">Quantity</label>
+        <input id="CroQuantity-{{ section.id }}" name="quantity" type="number" min="1" step="1" value="1" required inputmode="numeric">
+        <button type="submit" name="add" data-cro-submit {% unless can_purchase %}disabled{% endunless %}>{% if can_purchase %}Add to cart{% else %}Unavailable{% endif %}</button>
+        <p class="cro-product__status" role="status" aria-live="polite" aria-atomic="true" data-cro-status></p>
+        <a href="{{ routes.cart_url }}">View cart</a>
+        <noscript><p>Use the variant links to load another option. The purchase selector includes each plan's price and checkout charge.</p></noscript>
+      {% endform %}
+      {% for item in hero_product.variants %}
+        <template data-cro-options="{{ item.id }}">
+          {% unless item.requires_selling_plan %}
+            <option value="" data-price-label="{{ item.price | money_with_currency | escape }}" data-charge-label="One-time purchase">One-time purchase — {{ item.price | money_with_currency }}</option>
+          {% endunless %}
+          {% for allocation in item.selling_plan_allocations %}
+            <option value="{{ allocation.selling_plan.id }}" data-price-label="{{ allocation.price | money_with_currency | escape }}" data-charge-label="{{ allocation.checkout_charge_amount | money_with_currency | escape }} due at checkout; {{ allocation.per_delivery_price | money_with_currency | escape }} per delivery. Future pricing and terms follow the selected plan.">{{ allocation.selling_plan.name | escape }} — {{ allocation.price | money_with_currency }} ({{ allocation.checkout_charge_amount | money_with_currency }} due at checkout; {{ allocation.per_delivery_price | money_with_currency }} per delivery)</option>
+          {% endfor %}
+        </template>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p id="CroTitle-{{ section.id }}">Select a product in the Theme Editor to configure purchase options.</p>
+  {% endif %}
+</section>
+{% schema %}
+{
+  "name": "CRO purchase options",
+  "tag": "div",
+  "class": "cro-purchase-section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product", "info": "Leave blank to use the current product on a product template." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Choose your routine" },
+    { "type": "richtext", "id": "description", "label": "Intro", "default": "<p>Choose a size and the purchase option that works for you.</p>" },
+    { "type": "url", "id": "terms_url", "label": "Subscription and cancellation terms" }
+  ],
+  "presets": [{ "name": "CRO purchase options" }]
+}
+{% endschema %}
