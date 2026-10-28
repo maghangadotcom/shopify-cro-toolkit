@@ -541,6 +541,7 @@ test("embedded scoop stays one-time, cannot duplicate and shares dismissal with 
   await ritual.getByRole("button", { name: "Hide scoop recommendation", exact: true }).click();
   await expect(ritual).toContainText("Offer hidden by you");
   await add(page).click();
+  await expect(drawer(page)).toBeVisible();
   await expect(drawer(page).getByRole("button", { name: /^Add the scoop/ })).toHaveCount(0);
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: /Reset demo/ }).click();
