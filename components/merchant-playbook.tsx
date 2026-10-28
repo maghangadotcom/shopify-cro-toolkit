@@ -5,16 +5,17 @@ import { buildTestPlan, FEEDBACK_TAGS, IMPROVEMENTS } from "../lib/playbook";
 import type { FeedbackTag } from "../lib/playbook";
 
 interface Props {
+  onPreview: () => void;
   onTrack: (action: string, payload: Record<string, string | number | boolean>) => void;
 }
 
 const QUESTIONS = [
-  { id: "price", label: "Why this price?", answer: "Compare the full price with the amount you get and your own use. In this fictional example, 250 g at 18 g per cup makes 13 complete cups with 16 g left over. Spreading the full $24 bag price over those cups gives $1.85 per complete cup, rounded up to the next cent. Shipping, tax, equipment and brewing waste are excluded. Check the live coffee example below to explore the calculation." },
+  { id: "price", label: "Why this price?", answer: "Compare the full price with the amount you get and your own use. In this fictional example, 250 g at 18 g per cup makes 13 complete cups with 16 g left over. Spreading the full $24 bag price over those cups gives $1.85 per complete cup, rounded up to the next cent. Shipping, tax, equipment and brewing waste are excluded. Check the shopper preview to explore the calculation." },
   { id: "process", label: "How is it developed?", answer: "A useful product story explains a decision, its intended benefit and the supporting evidence. For this fictional coffee, a real merchant would need roast logs and tasting records before making quality claims." },
-  { id: "routine", label: "Will it fit my routine?", answer: "This demo product is whole bean, so you need a grinder. The live example offers one-time purchase or an optional subscription with a visible renewal interval. Exploring this answer does not select a subscription." },
+  { id: "routine", label: "Will it fit my routine?", answer: "This demo product is whole bean, so you need a grinder. The shopper preview offers one-time purchase or an optional subscription with a visible renewal interval. Exploring this answer does not select a subscription." },
 ] as const;
 
-export function MerchantPlaybook({ onTrack }: Props) {
+export function MerchantPlaybook({ onTrack, onPreview }: Props) {
   const [selectedId, setSelectedId] = useState(IMPROVEMENTS[0].id);
   const [example, setExample] = useState<"before" | "proposed">("before");
   const [questionId, setQuestionId] = useState<string | null>(null);
@@ -46,6 +47,7 @@ export function MerchantPlaybook({ onTrack }: Props) {
           <h2 id="merchant-start-title">A clearer page starts with a shopper’s question.</h2>
           <p>Explore seven practical improvements. See what changes, learn what evidence you need, then leave with a draft plan for your store.</p>
           <a className="merchant-primary" href="#improvements">Explore the improvements <span aria-hidden="true">↓</span></a>
+          <button className="merchant-secondary" onClick={onPreview}>Or explore the coffee shop →</button>
         </div>
         <ol className="merchant-steps">
           <li><span>01</span><div><strong>Choose a shopper problem</strong><p>Start with a question your customers actually ask.</p></div></li>
@@ -81,7 +83,7 @@ export function MerchantPlaybook({ onTrack }: Props) {
                 <button aria-pressed={example === "proposed"} onClick={() => { setExample("proposed"); onTrack("example_viewed", { improvement: lesson.id, design: "proposed" }); }}>Possible improvement</button>
               </div>
               <div className="merchant-example-copy" aria-live="polite"><p>{example === "before" ? lesson.before : lesson.proposed}</p></div>
-              {example === "proposed" && lesson.id === "price" && <a href="#storefront">Try the live price calculation below ↓</a>}
+              {example === "proposed" && lesson.id === "price" && <button className="merchant-secondary" onClick={onPreview}>Try the shopper preview →</button>}
               {example === "proposed" && lesson.id === "participation" && (
                 <div className="merchant-participation">
                   <p><strong>What would you like to know?</strong> Optional—no purchase required.</p>

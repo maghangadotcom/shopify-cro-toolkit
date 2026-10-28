@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { RitualStory } from "./ritual-story";
 import { MerchantPlaybook } from "./merchant-playbook";
 import { BAG_GRAMS, cupEstimate } from "../lib/buyer-guidance";
 import { useEffect, useRef, useState } from "react";
@@ -33,10 +34,12 @@ const initialEvent = createEvent(
 );
 
 export function CroLab() {
+  const [view, setView] = useState<"guide" | "shop">("guide");
   const [resetGeneration, setResetGeneration] = useState(0);
   const [dose, setDose] = useState(18);
   const [cupsPerDay, setCupsPerDay] = useState(1);
   const [previewBag, setPreviewBag] = useState(VARIANTS[0].id);
+  const [priceDetailsOpen, setPriceDetailsOpen] = useState(false);
   const [guidanceOpen, setGuidanceOpen] = useState(false);
   const [variantId, setVariantId] = useState(VARIANTS[0].id);
   const [purchaseType, setPurchaseType] = useState<PurchaseType>("one-time");
@@ -63,6 +66,9 @@ export function CroLab() {
   const variant = VARIANTS.find((item) => item.id === variantId)!;
   const price = unitPrice(variant.priceCents, purchaseType);
   const totals = cartTotals(cart);
+  const hasScoop = cart.some((line) => line.variantId === UPSELL.id);
+  const largerBag = VARIANTS[1];
+  const largerStock = largerBag.stock - cart.filter((line) => line.variantId === largerBag.id).reduce((sum, line) => sum + line.quantity, 0);
   const selection: Selection = {
     variantId,
     purchaseType,
@@ -104,6 +110,18 @@ export function CroLab() {
     if (buyBox.current) observer.observe(buyBox.current);
     return () => observer.disconnect();
   }, []);
+
+  function showView(nextView: "guide" | "shop") {
+    setView(nextView);
+    track("experience_viewed", { view: nextView });
+    requestAnimationFrame(() => document.getElementById(nextView === "guide" ? "start-here" : "storefront")?.scrollIntoView({ behavior: "instant" }));
+  }
+
+  function addScoop() {
+    void mutate("add", (lines) => addLine(lines, selectionToLine({
+      variantId: UPSELL.id, purchaseType: "one-time", quantity: 1,
+    })));
+  }
 
   function openCart() {
     returnFocus.current =
@@ -188,6 +206,7 @@ export function CroLab() {
     setCupsPerDay(1);
     setPreviewBag(VARIANTS[0].id);
     setGuidanceOpen(false);
+    setPriceDetailsOpen(false);
     setResetGeneration((value) => value + 1);
     setLatency(false);
     setFailNext(false);
@@ -214,8 +233,8 @@ export function CroLab() {
 
   return (
     <>
-      <a className="skip-link" href="#start-here">
-        Skip to guide
+      <a className="skip-link" href={view === "guide" ? "#start-here" : "#storefront"}>
+        Skip to content
       </a>
       <div className="lab-banner">
         <span className="live-dot" /> A practical guide for store owners{" "}
@@ -236,13 +255,21 @@ export function CroLab() {
           <small>Clearer shopping experiences, one improvement at a time</small>
         </div>
         <nav aria-label="Lab">
-          <a href="#start-here">Start here</a>
-          <a href="#improvements">Explore improvements</a>
-          <a href="#test-plan">Make a test plan</a>
+          <a href="#start-here" onClick={() => setView("guide")}>Start here</a>
+          <a href="#improvements" onClick={() => setView("guide")}>Explore improvements</a>
+          <a href="#test-plan" onClick={() => setView("guide")}>Make a test plan</a>
         </nav>
       </header>
 
       <main>
+        <div className="experience-switcher">
+          <div role="group" aria-label="Choose your experience">
+            <button aria-pressed={view === "guide"} onClick={() => showView("guide")}>Merchant guide</button>
+            <button aria-pressed={view === "shop"} onClick={() => showView("shop")}>Shopper preview</button>
+          </div>
+          <button className="text-button" disabled={busy} onClick={reset}>↻ Reset demo</button>
+        </div>
+        <div hidden={view !== "guide"}>
         <section className="intro" id="start-here" aria-labelledby="lab-title">
           <div>
             <p className="eyebrow">A HANDS-ON GUIDE FOR MERCHANTS</p>
@@ -256,12 +283,14 @@ export function CroLab() {
           </div>
         </section>
 
-        <MerchantPlaybook key={resetGeneration} onTrack={(action, payload) => track("guide_interaction", { action, ...payload })} />
+        <MerchantPlaybook key={resetGeneration} onPreview={() => showView("shop")} onTrack={(action, payload) => track("guide_interaction", { action, ...payload })} />
 
+        </div>
+        <div hidden={view !== "shop"}>
         <section className="storefront-intro" aria-labelledby="try-store-title">
           <p className="eyebrow">TRY IT AS A SHOPPER</p>
-          <h2 id="try-store-title">See the ideas on a product page.</h2>
-          <p>Compare the original and proposed versions. Change the bag or price assumptions, then try the bag. No order or payment is possible.</p>
+          <h2 id="try-store-title">A moment worth making time for.</h2>
+          <p>A fictional coffee shop to explore. No checkout, payment or real subscription.</p>
         </section>
 
         <section
@@ -295,9 +324,7 @@ export function CroLab() {
               : "A / Same product and prices, with a simpler buy box."}
             <span>Two examples, not a live test. Neither has proven better.</span>
           </p>
-          <button className="text-button" disabled={busy} onClick={reset}>
-            ↻ Reset demo
-          </button>
+
         </section>
 
         <section
@@ -347,14 +374,13 @@ export function CroLab() {
             <div className="buy-box" ref={buyBox}>
               <p className="eyebrow">WHOLE BEAN / MEDIUM ROAST</p>
               <div className="title-row">
-                <h2>Daybreak blend</h2>
+                <h1>Daybreak blend</h1>
                 <span className="product-mark" aria-hidden="true">
                   ↗
                 </span>
               </div>
               <p className="product-description">
-                Your morning, a little more considered. A rounded, comforting
-                cup with a bright finish.
+                A small pause before the day begins. Grind, brew, settle in: a rounded, comforting cup with a bright finish. Whole beans for your own brewer and grinder.
               </p>
               {isProposed && (
                 <div className="flavour-notes">
@@ -373,7 +399,7 @@ export function CroLab() {
                 )}
                 <span className="currency">USD / {variant.weight}</span>
               </div>
-              {isProposed && <p className="price-context">About {formatMoney(cup.centsPerCup)} per complete cup at {dose} g. Coffee only. <a href="#buyer-guidance-title">See assumptions or compare your routine ↓</a></p>}
+              {isProposed && <p className="price-context">About {formatMoney(cup.centsPerCup)} per complete cup at {dose} g. Coffee only. <button className="text-button" onClick={() => { setPriceDetailsOpen(true); requestAnimationFrame(() => document.getElementById("buyer-guidance")?.scrollIntoView({ behavior: "instant" })); }}>See cost assumptions and compare your routine</button></p>}
               <fieldset className="variant-options">
                 <legend>
                   01 <span>Choose your bag</span>
@@ -426,7 +452,7 @@ export function CroLab() {
                       <small>
                         {type === "one-time"
                           ? "One bag. On your terms."
-                          : "A recurring delivery. You choose the rhythm."}
+                          : "Keep your morning ritual stocked. Choose your rhythm."}
                       </small>
                     </span>
                     <b>{formatMoney(unitPrice(variant.priceCents, type))}</b>
@@ -493,7 +519,8 @@ export function CroLab() {
                 <span>No payment collected</span>
               </div>
               {isProposed && (
-                <section className="buyer-guidance" aria-labelledby="buyer-guidance-title">
+                <details id="buyer-guidance" className="buyer-guidance" open={priceDetailsOpen} onToggle={(event) => setPriceDetailsOpen(event.currentTarget.open)}>
+                  <summary>Your cost and coffee routine</summary>
                   <p className="eyebrow">A CLEARER WAY TO COMPARE</p>
                   <h3 id="buyer-guidance-title">What does your daily cup cost?</h3>
                   <p>About <strong>{formatMoney(cup.centsPerCup)} per complete cup</strong> from this {variant.weight} bag at {formatMoney(price)}.</p>
@@ -510,7 +537,7 @@ export function CroLab() {
                     setGuidanceOpen(!guidanceOpen);
                     track("buyer_question_opened", { question: "routine", opened: !guidanceOpen });
                   }}>Will this bag fit my routine?</button>
-                  {guidanceOpen && <div id="routine-helper" className="routine-helper">
+                  <div id="routine-helper" className="routine-helper" hidden={!guidanceOpen}>
                     <p>Compare sizes without changing your selections. This is optional and uses your {dose} g assumption above.</p>
                     <label htmlFor="cups-per-day">Cups per day</label>
                     <select id="cups-per-day" value={cupsPerDay} onChange={(event) => {
@@ -531,8 +558,8 @@ export function CroLab() {
                       track("routine_selection_applied", { item_id: previewBag, cups_per_day: cupsPerDay, dose_grams: dose });
                     }}>Use this bag size</button>
                     <p className="assumption-note">Only changes bag size. It does not add to your bag, choose a subscription or change its interval. Check availability and delivery timing above.</p>
-                  </div>}
-                </section>
+                  </div>
+                </details>
               )}
               {isProposed && (
                 <div className="product-details">
@@ -561,6 +588,31 @@ export function CroLab() {
               )}
             </div>
           </div>
+          {isProposed && <>
+            <section className="ritual-extras" aria-label="Complete your ritual">
+              <div className="ritual-extras-heading"><p className="eyebrow">ONLY IF IT FITS YOUR ROUTINE</p><h2>Make room for the everyday.</h2><p>Optional choices. Nothing is added or subscribed automatically.</p></div>
+              <div className="ritual-extras-grid">
+                <article className="ritual-extra-card">
+                  <span className="extra-illustration" aria-hidden="true">250 → 500</span>
+                  <div><p className="eyebrow">MORE TO SHARE</p><h3>A bigger bag for more mornings.</h3><p>500 g · {formatMoney(unitPrice(largerBag.priceCents, purchaseType))}{purchaseType === "subscription" ? ` every ${frequency} weeks` : " one time"}. Twice the coffee of 250 g, for {formatMoney(unitPrice(largerBag.priceCents, purchaseType) - unitPrice(VARIANTS[0].priceCents, purchaseType))} more per bag.</p><p className="extra-note">Choose based on how quickly you use it. Bigger is not always the better fit.</p>
+                  <button className="secondary-button" disabled={busy || variantId === largerBag.id || largerStock <= 0} onClick={() => {
+                    setVariantId(largerBag.id); setError("");
+                    setNotice("500 g selected. Your purchase option and interval are unchanged. Add it only when you are ready.");
+                    track("product_upsell_selected", { item_id: largerBag.id, purchase_type: purchaseType });
+                    addButton.current?.focus();
+                  }}>{variantId === largerBag.id ? "500 g selected" : largerStock <= 0 ? "500 g unavailable" : "Choose 500 g instead"}</button></div>
+                </article>
+                <article className="ritual-extra-card">
+                  <span className="extra-illustration scoop-illustration" aria-hidden="true">↳</span>
+                  <div><p className="eyebrow">A SMALL COMPANION</p><h3>A scoop for your coffee corner.</h3>
+                  <p>Reusable stainless-steel measuring scoop · {formatMoney(UPSELL.priceCents)} once.</p><p className="extra-note">For transferring beans or grounds. A scoop is not a precision scale; weigh your dose if your recipe calls for grams.</p>
+                  {hasScoop ? <p className="extra-status" role="status">Already in your bag · one time only</p> : dismissed ? <p className="extra-status">Offer hidden by you. Reset demo restores it.</p> : <><button className="secondary-button" disabled={busy} onClick={addScoop}>Add scoop to demo bag</button><button className="text-button" onClick={dismissUpsell}>Hide scoop recommendation</button></>}
+                  </div>
+                </article>
+              </div>
+            </section>
+            <RitualStory key={resetGeneration} />
+          </>}
           <div className="store-footer">
             <span>GOOD COFFEE. CLEAR CHOICES.</span>
             <span>
@@ -568,6 +620,8 @@ export function CroLab() {
             </span>
           </div>
         </section>
+
+        </div>
 
         <details id="developer-details" className="developer-details">
           <summary>Developer details · optional</summary>
@@ -755,7 +809,7 @@ export function CroLab() {
         {notice}
       </p>
 
-      {stickyVisible && (
+      {view === "shop" && stickyVisible && (
         <div className="sticky-atc" data-testid="sticky-atc">
           <div>
             <strong>Daybreak / {variant.weight}</strong>
@@ -959,7 +1013,7 @@ export function CroLab() {
                           Reusable measuring scoop ·{" "}
                           {formatMoney(UPSELL.priceCents)}
                         </p>
-                        <small>Optional. Added once, never recurring.</small>
+                        <small>Optional. Added once, never recurring. For scooping—not a precision scale.</small>
                       </div>
                       <button
                         aria-label="Dismiss scoop offer"

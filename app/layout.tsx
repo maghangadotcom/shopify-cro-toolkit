@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./playbook.css";
+import "./ritual-story.css";
 export const metadata: Metadata = {
   title: "Shopify CRO Lab — Thomas Maghanga",
   description:

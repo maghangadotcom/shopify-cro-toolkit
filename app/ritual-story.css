@@ -1,0 +1,73 @@
+/* Quiet shopper-facing story sections; isolated from the merchant guide. */
+.ritual-story { border-top:1px solid #e1ded3; color:#3e3b32; }
+.ritual-sample-label { padding:12px 40px; background:#f6f1e7; color:#686052; font-size:9px; font-weight:700; letter-spacing:1.6px; border-bottom:1px solid #e4dccd; }
+.ritual-story h2 { font-size:clamp(28px,3.2vw,42px); letter-spacing:-1.1px; line-height:1.15; }
+.ritual-story h2 em { font-family:Georgia,serif; font-weight:400; }
+.ritual-story h3 { font-size:19px; letter-spacing:-.35px; }
+.ritual-story p { line-height:1.7; }
+.ritual-story .eyebrow { font-size:9px; margin-bottom:17px; letter-spacing:1.6px; }
+.ritual-morning { padding:56px 48px; background:#fffdf8; }
+.ritual-story-heading { max-width:620px; margin:0 auto; text-align:center; }
+.ritual-story-heading > p:last-child { max-width:480px; margin:20px auto 0; font-size:14px; color:#625d52; }
+.ritual-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; list-style:none; padding:0; margin:42px 0 0; }
+.ritual-steps li { padding-top:19px; border-top:1px solid #cfc6b4; }
+.ritual-step-number { display:block; font-size:9px; font-weight:700; letter-spacing:1.2px; color:#7b6a50; margin-bottom:16px; }
+.ritual-steps p { font-size:13px; color:#625d52; margin-top:12px; }
+.ritual-fit { display:grid; grid-template-columns:1fr 1fr; background:#f3ead9; }
+.ritual-profile-art { display:flex; flex-direction:column; justify-content:center; align-items:center; padding:32px; background:#e7dac3; min-width:0; }
+.ritual-profile-art svg { display:block; width:100%; max-width:430px; height:auto; }
+.ritual-profile-art span { font:italic 15px Georgia,serif; color:#75664f; }
+.ritual-fit-copy { padding:48px 40px; min-width:0; }
+.ritual-tasting-label { margin-top:24px; font-size:10px; color:#75664f; }
+.ritual-tastes { display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:8px 0 26px; padding:0; }
+.ritual-tastes li { font-size:11px; padding:6px 11px; border:1px solid #c8baa3; border-radius:20px; }
+.ritual-fit-facts { margin:0; }
+.ritual-fit-facts > div { display:grid; grid-template-columns:75px minmax(0,1fr); gap:16px; padding:15px 0; border-top:1px solid #d9ccb5; }
+.ritual-fit-facts dt { font-size:11px; font-weight:700; }
+.ritual-fit-facts dd { margin:0; font-size:12px; line-height:1.65; color:#625d52; }
+.ritual-process { display:grid; grid-template-columns:1fr 1fr; gap:64px; padding:54px 48px; background:#fffdf8; }
+.ritual-process > div > p:last-child { margin-top:18px; color:#625d52; font-size:13px; max-width:380px; }
+.ritual-process ol { padding:0; list-style:none; margin:0; display:grid; gap:24px; }
+.ritual-process li { display:flex; align-items:flex-start; gap:20px; }
+.ritual-process li > span { border:1px solid #cfc6b4; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; }
+.ritual-process h3 { font-size:15px; padding-top:7px; }
+.ritual-process li p { font-size:12px; color:#625d52; margin-top:9px; }
+.ritual-subscription-story { background:#e3e8d5; padding:44px 48px; display:flex; align-items:center; justify-content:space-between; gap:40px; }
+.ritual-subscription-story > div { max-width:670px; }
+.ritual-subscription-story h2 { font-size:32px; max-width:540px; }
+.ritual-subscription-story h2 + p { margin-top:17px; font-size:14px; }
+.ritual-subscription-story .ritual-terms { font-size:11px; color:#59614d; margin-top:14px; }
+.ritual-return-link { flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; gap:18px; min-height:46px; padding:12px 17px; border:1px solid #626e4e; text-decoration:none; font-size:12px; font-weight:700; border-radius:3px; }
+.ritual-return-link:hover { background:#d4ddc1; }
+.ritual-faq { display:grid; grid-template-columns:1fr 1.4fr; gap:64px; padding:54px 48px; background:#fffdf8; }
+.ritual-faq > div:first-child > p:last-child { margin-top:20px; color:#625d52; font-size:13px; max-width:260px; }
+.ritual-faq-list { min-width:0; }
+.ritual-faq details { border-top:1px solid #d8d2c6; }
+.ritual-faq details:last-child { border-bottom:1px solid #d8d2c6; }
+.ritual-faq summary { padding:19px 24px 19px 0; position:relative; font-size:13px; font-weight:700; cursor:pointer; list-style:none; }
+.ritual-faq summary::-webkit-details-marker { display:none; }
+.ritual-faq summary::after { content:"+"; position:absolute; right:0; top:17px; font-size:18px; font-weight:400; }
+.ritual-faq details[open] summary::after { content:"−"; }
+.ritual-faq details p { padding:0 12px 21px 0; color:#625d52; font-size:12px; }
+@media(max-width:900px) {
+  .ritual-morning, .ritual-process, .ritual-faq { padding:40px 28px; }
+  .ritual-fit-copy { padding:36px 26px; }
+  .ritual-process, .ritual-faq { gap:32px; }
+  .ritual-subscription-story { padding:36px 28px; flex-direction:column; align-items:flex-start; gap:24px; }
+  .ritual-steps { gap:20px; }
+}
+@media(max-width:600px) {
+  .ritual-sample-label { padding:12px 20px; line-height:1.6; }
+  .ritual-morning, .ritual-process, .ritual-faq { padding:36px 20px; }
+  .ritual-steps, .ritual-fit, .ritual-process, .ritual-faq { grid-template-columns:1fr; }
+  .ritual-steps { margin-top:28px; gap:22px; }
+  .ritual-step-number { margin-bottom:10px; }
+  .ritual-steps p { margin-top:8px; }
+  .ritual-profile-art { padding:25px 20px; }
+  .ritual-profile-art svg { max-width:300px; }
+  .ritual-fit-copy { padding:32px 20px; }
+  .ritual-subscription-story { padding:32px 20px; }
+  .ritual-subscription-story h2 { font-size:29px; }
+  .ritual-return-link { width:100%; }
+  .ritual-faq > div:first-child > p:last-child { max-width:none; }
+}
