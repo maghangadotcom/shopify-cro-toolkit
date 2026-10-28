@@ -101,15 +101,28 @@ export function CroLab() {
     } catch {
       /* The demo still works without browser storage. */
     }
-    const observer = new IntersectionObserver(
-      ([entry]) =>
-        setStickyVisible(
-          !entry.isIntersecting && entry.boundingClientRect.top < 0,
-        ),
-      { threshold: 0 },
-    );
+    let frame = 0;
+    const updateSticky = () => {
+      frame = 0;
+      const bounds = buyBox.current?.getBoundingClientRect();
+      setStickyVisible(Boolean(bounds && bounds.width > 0 && bounds.bottom <= 0));
+    };
+    const scheduleSticky = () => {
+      if (!frame) frame = requestAnimationFrame(updateSticky);
+    };
+    // An observer alone misses instant jumps from fully above to fully below
+    // the viewport (both have zero intersection). Recheck geometry on scroll.
+    const observer = new IntersectionObserver(scheduleSticky, { threshold: 0 });
     if (buyBox.current) observer.observe(buyBox.current);
-    return () => observer.disconnect();
+    window.addEventListener("scroll", scheduleSticky, { passive: true });
+    window.addEventListener("resize", scheduleSticky);
+    scheduleSticky();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", scheduleSticky);
+      window.removeEventListener("resize", scheduleSticky);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   function showView(nextView: "guide" | "shop") {

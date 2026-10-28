@@ -343,6 +343,11 @@ test("mobile sticky purchase action works with the keyboard and preserves select
     .selectOption("2");
   await page.locator("#inspector").scrollIntoViewIfNeeded();
   await expect(sticky).toBeVisible();
+  // Instant navigation can jump over the entire buy box without intersecting it.
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect(sticky).not.toBeVisible();
+  await page.locator("#inspector").scrollIntoViewIfNeeded();
+  await expect(sticky).toBeVisible();
   await expect(sticky).toContainText("$20.40 every 2 weeks");
   await page
     .getByRole("checkbox", { name: /Fail the next cart request/ })
