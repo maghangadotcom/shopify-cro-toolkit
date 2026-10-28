@@ -227,7 +227,7 @@ export function CroLab() {
           </a>
           <a
             className="source-link"
-            href={REPO.replace("/blob/development/", "")}
+            href={REPO.replace("/blob/development/", "/tree/development/")}
             target="_blank"
             rel="noreferrer"
           >

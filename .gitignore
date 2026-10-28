@@ -8,3 +8,4 @@ test-results/
 !.env.example
 *.tsbuildinfo
 .DS_Store
+next-env.d.ts
