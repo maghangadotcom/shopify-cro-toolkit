@@ -1,0 +1,22 @@
+.cro-product { --cro-ink: #193d31; --cro-paper: #faf8f1; display: grid; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: clamp(1rem, 4vw, 3rem); color: var(--cro-ink); background: var(--cro-paper); }
+.cro-product * { box-sizing: border-box; }
+.cro-product__media { align-self: start; }
+.cro-product__image { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.cro-product__content { min-width: 0; }
+.cro-product h2 { font: inherit; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; margin: .75rem 0 1.5rem; }
+.cro-product__eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+.cro-product__variants { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0; }
+.cro-product__variants a { display: inline-flex; align-items: center; min-height: 48px; padding: .6rem .9rem; color: inherit; border: 1px solid #aebdb4; text-decoration: none; }
+.cro-product__variants a[aria-current] { background: var(--cro-ink); color: white; }
+.cro-product__form { display: grid; gap: .75rem; }
+.cro-product__form label { font-weight: 600; }
+.cro-product__form select, .cro-product__form input[type="number"] { width: 100%; min-height: 48px; padding: .7rem; font: inherit; color: inherit; border: 1px solid #7a8e81; background: white; border-radius: 0; }
+.cro-product__form input[type="number"] { max-width: 7rem; }
+.cro-product__price { font-size: 1.65rem; font-weight: 600; margin: .5rem 0 0; }
+.cro-product__terms { font-size: .875rem; line-height: 1.6; margin: 0; }
+.cro-product__form button { min-height: 52px; padding: 1rem; background: var(--cro-ink); color: white; border: 1px solid var(--cro-ink); font: inherit; font-weight: 600; cursor: pointer; }
+.cro-product__form button:disabled { background: #e2e6df; color: #536456; cursor: not-allowed; }
+.cro-product__status { min-height: 1.5em; line-height: 1.5; margin: 0; }
+.cro-product a { color: inherit; overflow-wrap: anywhere; }
+.cro-product :focus-visible { outline: 3px solid #ba5b2d; outline-offset: 4px; }
+@media (min-width: 800px) { .cro-product { grid-template-columns: 1fr 1fr; gap: 4rem; } }
