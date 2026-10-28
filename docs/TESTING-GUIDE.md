@@ -33,7 +33,7 @@ PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/chromium npm run test:browser
 
 ## Merchant and buyer-guidance review
 
-1. Start from a fresh reload. **Developer details** should be closed; the plain-language learning path should work without opening it.
+1. Start from a fresh reload in **Merchant guide**. **Developer details** should be closed; the plain-language learning path should work without opening it. Switch to **Shopper preview** to inspect the separate full product page. Switch back and confirm shopping choices are preserved.
 2. Navigate the lessons using only the keyboard. Compare before/proposed examples and confirm each explains a problem, an action, evidence needed, a metric and a possible downside.
 3. Explore a shopper question and tag fictional feedback. Confirm that these actions reveal relevant content, not testimonials or invented customer findings. Nothing should be gated behind submitting personal information.
 4. Choose one lesson for a test plan and change its evidence checklist. Verify the plan remains a draft, does not claim a winning test and is discarded on reset or reload.
@@ -44,6 +44,15 @@ PLAYWRIGHT_EXECUTABLE_PATH=/usr/bin/chromium npm run test:browser
 9. Open **Developer details** to inspect new local events. Confirm deterministic sequence numbers, explicit simulation/local-only labels and no network transmission. Diagnostic clicks are not conversion outcomes.
 
 These are required review scenarios, not a claim that every platform has been manually verified. Automated assertions are in `tests/browser.spec.ts` and `tests/buyer-guidance.test.ts`. Source attribution and evidence limits are in [BUYER-PSYCHOLOGY.md](BUYER-PSYCHOLOGY.md).
+
+## Ritual page and embedded offer review
+
+1. In **Shopper preview**, confirm one-time purchase is the default. Read ritual copy, product details and FAQs without entering personal information or joining a subscription.
+2. Choose a subscription and a nondefault interval, then use **Choose 500 g instead**. Confirm only size changes; the price updates and no item is added until an explicit add action.
+3. Add the optional scoop from **Complete your ritual**. Verify the cart contains one one-time scoop, not recurring coffee or a subscription. The same offer cannot add a duplicate from the page or cart.
+4. Remove the scoop. Confirm the page offer becomes available again. Dismiss the offer and verify both page and cart respect the dismissal; reload preserves dismissal for this browser tab, while Reset restores it.
+5. Switch Merchant guide / Shopper preview repeatedly with a nonempty cart and chosen frequency. Confirm no choices change. Repeat with a simulated failed add, then retry; cart must remain unchanged on failure.
+6. Use keyboard-only navigation for the embedded offers and FAQ disclosures at mobile widths. Check visible focus, meaningful buttons, disclosure state, contrast and no horizontal scrolling.
 
 ## Existing commerce walkthrough
 

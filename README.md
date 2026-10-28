@@ -11,7 +11,9 @@ The guided playbook adapts ideas discussed by **Rishi Rawat / Frictionless Comme
 1. **Start here:** understand the fictional coffee example and its limits.
 2. **Explore improvements:** compare a weak example with a proposed improvement. Each lesson explains the shopper problem, what to change, evidence to gather, what to measure and what could go wrong.
 3. **Make a test plan:** choose one improvement and check the evidence you still need. The plan is a local draft, not a live experiment or a promise of better sales.
-4. **Try the coffee page:** change bag size, inspect the cost-per-cup assumptions and optionally apply a bag size after comparing a routine. Nothing is ordered and no subscription is created.
+4. **Shopper preview:** switch to a separate, full coffee product page with ritual guidance, product details and FAQs. Change bag size, inspect the cost-per-cup assumptions and optionally apply a bag size after comparing a routine. Nothing is ordered and no subscription is created.
+
+The default **Merchant guide** and **Shopper preview** are separate views so shoppers can explore a clean page without lesson panels. Switching views preserves product and cart choices. The optional larger-bag offer changes only the bag size; the optional scoop is always a one-time item, with the same dismissal and inventory state on the page and in the cart. Neither offer starts a subscription automatically.
 
 Developer evidence, simulated event payloads and failure controls are in the optional **Developer details** disclosure. Reset clears the new learning choices as well as the cart and event history. Reload also discards the in-memory learning plan.
 
@@ -60,6 +62,7 @@ The **separate OS 2.0 section** runs in a Shopify-hosted theme and uses Shopify'
 app/                           Next.js shell, styles and metadata
 components/cro-lab.tsx          Product flow, cart dialog and optional inspector
 components/merchant-playbook.tsx Merchant lessons and local test-plan builder
+components/ritual-story.tsx      Shopper-facing ritual story and FAQs
 lib/playbook.ts                Source-grounded lesson content
 lib/buyer-guidance.ts          Explicit cup estimates and routine comparisons
 lib/fixtures.ts                Deterministic fictional catalog

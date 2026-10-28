@@ -26,6 +26,14 @@ The coffee estimate uses the selected fictional price and bag weight with an exp
 
 The optional routine comparison lets the visitor choose cups per day and compare a bag size, then see how many days its complete cups could cover. It is arithmetic, not a freshness recommendation or a guarantee. “Use this bag size” applies only that size; it keeps the purchase type and delivery interval unchanged, never subscribes the visitor and never adds to the bag. The visitor can edit or reset the choices.
 
+## Ritual-led product page and optional offers
+
+The **Shopper preview** is separate from the default **Merchant guide**. It develops the fictional coffee into a full product story: a realistic daily ritual, what the product is and is not, an explanation of the subscription choice and FAQs. One-time purchase remains the default, with a clear price and accessible alternative. Ritual framing is an invitation to imagine use, not evidence of better health, quality or conversion.
+
+The larger-bag offer changes only the selected size after an explicit click. It must preserve the visitor's purchase type and delivery interval. The measuring-scoop cross-sell is a separate, one-time $8 demo item; adding it never converts coffee to a subscription. Page and cart share one inventory and offer-dismissal state. A scoop already in the cart cannot be added again from the offer; removing it makes it available again unless it has been dismissed. Reset restores the offer.
+
+These are hypotheses for clearer choices and relevant additions, not an “optimized” result. Evaluate completed purchases and subscription selection alongside total cost comprehension, early cancellations, returns, margin, accessory relevance and support questions. Never optimize subscription uptake by hiding renewal terms, preselecting a recurring plan or adding items without consent. The existing failure, busy-state and keyboard checks apply equally to embedded offers.
+
 ## A useful first test plan
 
 1. Choose one shopper problem supported by evidence, not all lessons at once.
